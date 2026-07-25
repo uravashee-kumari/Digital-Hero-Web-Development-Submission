@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Contact — Larder Kitchen Inventory Software</title>
+  <meta name="description" content="Book a Larder walkthrough or get in touch with a question about kitchen inventory software for your restaurant group.">
+  <link rel="canonical" href="https://example.com/contact.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contact Larder">
+  <meta property="og:description" content="Book a walkthrough of Larder's kitchen inventory and ordering software.">
+  <meta property="og:url" content="https://example.com/contact.html">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="logo" href="index.html">Larder<span>.</span></a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav">Menu</button>
+      <nav aria-label="Primary">
+        <ul class="nav-list" id="primary-nav">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="product.html">Product</a></li>
+          <li><a href="pricing.html">Pricing</a></li>
+          <li><a href="contact.html" aria-current="page">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero">
+      <div class="container">
+        <p class="eyebrow">Contact</p>
+        <h1>Book a 20-minute walkthrough</h1>
+        <p>Tell us a little about your locations first — we'll build the demo
+          around your own SKUs instead of running through a canned script.</p>
+      </div>
+    </section>
+
+    <div class="ticket-divider" aria-hidden="true"></div>
+
+    <section class="section-tight">
+      <div class="container reveal" style="max-width: 40rem;">
+       
+        <form id="contact-form" novalidate>
+          <div class="form-field">
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" autocomplete="name" required>
+          </div>
+
+          <div class="form-field">
+            <label for="email">Work email</label>
+            <input type="email" id="email" name="email" autocomplete="email" required aria-describedby="email-hint">
+            <span class="hint" id="email-hint">We'll send the walkthrough invite here.</span>
+          </div>
+
+          <div class="form-field">
+            <label for="locations">Number of locations</label>
+            <select id="locations" name="locations" required>
+              <option value="">Choose one</option>
+              <option value="1">1</option>
+              <option value="2-5">2–5</option>
+              <option value="6-25">6–25</option>
+              <option value="26+">26+</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="message">What's the biggest inventory headache right now?</label>
+            <textarea id="message" name="message" rows="4"></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Request walkthrough</button>
+          <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <p class="logo" style="color: var(--color-bg);">Larder<span style="color:var(--color-accent);">.</span></p>
+          <p>Kitchen inventory and ordering software for multi-location restaurant groups.</p>
+        </div>
+        <nav aria-label="Footer">
+          <h4 style="color: var(--color-bg);">Site</h4>
+          <ul class="nav-list" style="flex-direction: column; gap: 0.5rem;">
+            <li><a href="product.html">Product</a></li>
+            <li><a href="pricing.html">Pricing</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+      <p class="footer-credit">Built for Digital Heroes Training Task — <a href="https://digitalheroesco.com">digitalheroesco.com</a></p>
+    </div>
+  </footer>
+
+  <script src="js/script.js" defer></script>
+</body>
+</html>

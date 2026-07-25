@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rebuilt Section Demo — SSO Stat Carousel Layout Shift Fix</title>
+<style>
+  :root {
+    --ink: #1c2b3a;
+    --blue: #0b4f8a;
+    --blue-dark: #093a66;
+    --accent: #c9971f;
+    --good: #2e7d4f;
+    --bad: #a83c34;
+    --bg: #eef2f6;
+    --card: #ffffff;
+    --line: #d7e0e8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.5;
+    padding: 1.5rem;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 1.3rem; margin: 0 0 0.25rem; }
+  .subtitle { color: #4a5b6b; font-size: 0.95rem; margin: 0 0 1.5rem; }
+
+  .controls {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+  }
+  button {
+    font: inherit;
+    font-weight: 600;
+    padding: 0.65rem 1.1rem;
+    border-radius: 6px;
+    border: 2px solid var(--ink);
+    background: var(--card);
+    cursor: pointer;
+  }
+  button.active { background: var(--ink); color: white; }
+  button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  .mode-label {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+  }
+  .mode-label.before { background: #fbe4e1; color: var(--bad); }
+  .mode-label.after { background: #e2f0e7; color: var(--good); }
+
+  .portal {
+    background: var(--blue);
+    background: linear-gradient(180deg, var(--blue), var(--blue-dark));
+    border-radius: 8px;
+    padding: 1rem;
+    color: white;
+  }
+  .portal-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.9rem;
+  }
+  .logo-box {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 6px;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem; font-weight: 700;
+  }
+ 
+  .logo-box.before-unsized { width: auto; height: auto; padding: 0; }
+  .logo-box.before-unsized img { display: block; }
+
+  .portal-title { font-weight: 700; font-size: 1rem; }
+  .portal-title span { display: block; font-weight: 400; font-size: 0.75rem; opacity: 0.8; }
+
+  
+  .stat-carousel {
+    background: rgba(255,255,255,0.08);
+    border-radius: 6px;
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.9rem;
+    overflow: hidden;
+  }
+
+  .stat-carousel.fixed-height { height: 92px; }
+
+  .stat-card .label { font-size: 0.72rem; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.04em; }
+  .stat-card .value { font-size: 1.6rem; font-weight: 700; margin-top: 0.15rem; }
+  .stat-card .note { font-size: 0.72rem; opacity: 0.7; margin-top: 0.3rem; }
+
+  .actions { display: flex; gap: 0.6rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+  .actions button.portal-btn {
+    border: none;
+    background: var(--accent);
+    color: var(--ink);
+    font-size: 0.85rem;
+    padding: 0.55rem 0.9rem;
+  }
+  .actions button.portal-btn.secondary { background: rgba(255,255,255,0.15); color: white; }
+
+  .banners { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .banner {
+    background: white;
+    border-radius: 6px;
+    padding: 0.5rem;
+    flex: 1;
+    min-width: 130px;
+    color: var(--ink);
+    font-size: 0.72rem;
+    text-align: center;
+  }
+  .banner .img-slot {
+    background: #dbe3ea;
+    border-radius: 4px;
+    height: 36px;
+    margin-bottom: 0.3rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    color: #6b7b8a;
+  }
+  .banner.before-unsized .img-slot { height: 0; margin-bottom: 0; overflow: hidden; }
+
+
+  .readout {
+    margin-top: 1.25rem;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+  }
+  .readout h2 { font-size: 0.95rem; margin: 0 0 0.6rem; }
+  .cls-value { font-size: 2rem; font-weight: 700; font-family: 'Courier New', monospace; }
+  .cls-value.good { color: var(--good); }
+  .cls-value.bad { color: var(--bad); }
+  .readout p { font-size: 0.85rem; color: #4a5b6b; margin: 0.4rem 0 0; }
+
+  @media (max-width: 480px) {
+    .portal-title { font-size: 0.9rem; }
+    .cls-value { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Rebuilt Section: SSO Stat Carousel</h1>
+  <p class="subtitle">A live, working reproduction of the layout-shift bug found in the Task B diagnosis, and the fix. Click "Rotate Stat" a few times in each mode — the CLS number below is measured live by your browser's Layout Instability API, not simulated.</p>
+
+  <div class="controls">
+    <button id="btn-before" class="active">Before (unfixed)</button>
+    <button id="btn-after">After (fixed)</button>
+    <button id="btn-rotate">Rotate Stat →</button>
+    <button id="btn-reset">Reset CLS Counter</button>
+  </div>
+
+  <span id="mode-label" class="mode-label before">Mode: Before — reproduces the bug</span>
+
+  <div class="portal" id="portal">
+    <div class="portal-top">
+      <div class="logo-box before-unsized" id="logo-box">
+        <img id="logo-img" src="" alt="RajSSO logo" style="display:none;">
+        <span id="logo-placeholder">SSO</span>
+      </div>
+      <div class="portal-title">Rajasthan Single Sign On<span>One Digital Identity for all Applications</span></div>
+    </div>
+
+    <div class="stat-carousel" id="carousel">
+      <div class="stat-card" id="stat-card">
+        <div class="label">G2G Apps</div>
+        <div class="value">412</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="portal-btn">Login to RajSSO</button>
+      <button class="portal-btn secondary">Register here</button>
+    </div>
+
+    <div class="banners" id="banners">
+      <div class="banner before-unsized">
+        <div class="img-slot">BIS</div>
+        BIS Website
+      </div>
+      <div class="banner before-unsized">
+        <div class="img-slot">App</div>
+        BISCare-App
+      </div>
+    </div>
+  </div>
+
+  <div class="readout">
+    <h2>Live measured layout shift (this demo page, current mode)</h2>
+    <div class="cls-value bad" id="cls-display">0.000</div>
+    <p id="cls-explainer">Every jump you see above is being scored by Chrome in real time, the same metric Lighthouse reports. Rotate the stat a few times to accumulate shift in "Before" mode, then switch to "After" and reset the counter to compare.</p>
+  </div>
+</div>
+
+<script>
+  const stats = [
+    { label: "G2G Apps", value: "412", note: "" },
+    { label: "G2C / G2B Apps", value: "257", note: "" },
+    { label: "Identities", value: "34,001,407", note: "Registered citizens statewide" },
+  ];
+  let statIndex = 0;
+  let mode = "before"; // or "after"
+
+  const carousel = document.getElementById("carousel");
+  const statCard = document.getElementById("stat-card");
+  const modeLabel = document.getElementById("mode-label");
+  const btnBefore = document.getElementById("btn-before");
+  const btnAfter = document.getElementById("btn-after");
+  const banners = document.querySelectorAll(".banner");
+  const logoBox = document.getElementById("logo-box");
+
+  function renderStat() {
+    const s = stats[statIndex];
+    // In "before" mode the note line only appears for the Identities card,
+    // which is exactly what changes this card's real height vs the others —
+    // reproducing the original bug's root cause.
+    statCard.innerHTML =
+      '<div class="label">' + s.label + '</div>' +
+      '<div class="value">' + s.value + '</div>' +
+      (s.note ? '<div class="note">' + s.note + '</div>' : '');
+  }
+
+  function setMode(next) {
+    mode = next;
+    if (mode === "before") {
+      carousel.classList.remove("fixed-height");
+      banners.forEach(b => b.classList.add("before-unsized"));
+      logoBox.classList.add("before-unsized");
+      modeLabel.textContent = "Mode: Before — reproduces the bug";
+      modeLabel.className = "mode-label before";
+      btnBefore.classList.add("active");
+      btnAfter.classList.remove("active");
+    } else {
+      carousel.classList.add("fixed-height");
+      banners.forEach(b => b.classList.remove("before-unsized"));
+      logoBox.classList.remove("before-unsized");
+      modeLabel.textContent = "Mode: After — height reserved, images sized";
+      modeLabel.className = "mode-label after";
+      btnAfter.classList.add("active");
+      btnBefore.classList.remove("active");
+    }
+  }
+
+  document.getElementById("btn-before").addEventListener("click", () => setMode("before"));
+  document.getElementById("btn-after").addEventListener("click", () => setMode("after"));
+  document.getElementById("btn-rotate").addEventListener("click", () => {
+    statIndex = (statIndex + 1) % stats.length;
+    renderStat();
+  });
+
+  
+  let clsTotal = 0;
+  const clsDisplay = document.getElementById("cls-display");
+
+  function updateDisplay() {
+    clsDisplay.textContent = clsTotal.toFixed(3);
+    clsDisplay.className = "cls-value " + (clsTotal < 0.1 ? "good" : "bad");
+  }
+
+  if ("PerformanceObserver" in window) {
+    try {
+      const po = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (!entry.hadRecentInput) {
+            clsTotal += entry.value;
+          }
+        }
+        updateDisplay();
+      });
+      po.observe({ type: "layout-shift", buffered: true });
+    } catch (e) {
+      document.getElementById("cls-explainer").textContent =
+        "Your browser doesn't support the Layout Instability API for a live reading — try this in Chrome to see the live number update.";
+    }
+  } else {
+    document.getElementById("cls-explainer").textContent =
+      "Your browser doesn't support the Layout Instability API for a live reading — try this in Chrome to see the live number update.";
+  }
+
+  document.getElementById("btn-reset").addEventListener("click", () => {
+    clsTotal = 0;
+    updateDisplay();
+  });
+
+  renderStat();
+</script>
+</body>
+</html>
